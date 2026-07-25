@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doctrine-Driven Development · D³</title>
+<meta name="description" content="Install the engineering discipline, not just the prompt. Skills that make your coding agent earn architectural decisions with observable evidence. Native for Codex, Claude Code, Pi, Kimi Code, and OpenCode.">
+<style>
+  :root{
+    --ink:#13120e; --surface:#1a1813; --paper:#ebe7db; --muted:#8f897a;
+    --faint:#2a271f; --hair:#332f26; --seal:#c89b46; --verified:#89ac6c;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --mono:ui-monospace,'SF Mono','Cascadia Code',Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--sans);
+    font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(1100px 560px at 50% -12%, #1b1913 0%, var(--ink) 62%);}
+  .wrap{max-width:640px;margin:0 auto;padding:0 26px}
+  a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--hair)}
+  a:hover{border-color:var(--seal)}
+  a:focus-visible,label:focus-visible,button:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
+
+  .st{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
+  .i-es{display:none}
+  #lang-es:checked ~ * .i-en{display:none}
+  #lang-es:checked ~ * .i-es{display:revert}
+  .t-pro{display:none}
+  #tier-pro:checked ~ * .t-pro{display:revert}
+  #tier-pro:checked ~ * .t-st{display:none}
+  .cmdrow code,pre{scrollbar-width:none;-ms-overflow-style:none}
+  .cmdrow code::-webkit-scrollbar,pre::-webkit-scrollbar{display:none;width:0;height:0}
+
+  /* top bar */
+  .top{display:flex;justify-content:space-between;align-items:center;padding:22px 0 0}
+  .top .mk{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.02em}
+  .top .mk b{color:var(--seal);font-weight:400}
+  .lang{display:flex;gap:2px}
+  .lb{font-family:var(--mono);font-size:12px;color:var(--muted);padding:3px 8px;cursor:pointer;border-radius:5px;transition:color .15s,background .15s}
+  .lb:hover{color:var(--paper)}
+  #lang-en:checked ~ * .lb-en,#lang-es:checked ~ * .lb-es{color:var(--ink);background:var(--seal)}
+
+  header{padding:92px 0 0}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(31px,6.4vw,46px);line-height:1.14;letter-spacing:-.01em;margin:0 0 26px}
+  h1 em{font-style:normal;color:var(--seal)}
+  .sub{font-size:18px;color:#cfc9bb;margin:0 0 14px;max-width:52ch}
+  .pos{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:0 0 30px;line-height:1.7}
+
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  body{animation:rise .5s ease both}
+  header>*,.skills,.honest,footer{animation:rise .5s ease both}
+  header>*{animation-delay:.04s}
+  .skills{animation-delay:.08s}
+  .honest{animation-delay:.12s}
+  footer{animation-delay:.16s}
+
+  /* tier */
+  .tier{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 13px}
+  .tb{font-family:var(--mono);font-size:12.5px;color:var(--muted);padding:5px 13px;
+    border:1px solid var(--hair);border-radius:999px;cursor:pointer;
+    transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
+  .tb:hover{color:var(--paper);border-color:var(--muted)}
+  #tier-st:checked ~ * .tb-st,#tier-pro:checked ~ * .tb-pro{color:var(--ink);background:var(--seal);border-color:var(--seal)}
+  .tnote{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+  /* install */
+  .picker{background:var(--surface);border:1px solid var(--hair);border-radius:11px;overflow:hidden}
+  .tabs{display:flex;flex-wrap:wrap;gap:2px;padding:8px 8px 0;border-bottom:1px solid var(--faint)}
+  .tab{font-family:var(--mono);font-size:12.5px;color:var(--muted);border-bottom:2px solid transparent;
+    padding:8px 11px 9px;cursor:pointer;transition:color .15s,border-color .15s;white-space:nowrap}
+  .tab:hover{color:var(--paper)}
+  #ag-claude:checked ~ * .tab-claude,#ag-codex:checked ~ * .tab-codex,#ag-pi:checked ~ * .tab-pi,
+  #ag-kimi:checked ~ * .tab-kimi,#ag-open:checked ~ * .tab-open{color:var(--paper);border-color:var(--seal)}
+  .panel{display:none;padding:17px 15px}
+  #ag-claude:checked ~ * .panel-claude,#ag-codex:checked ~ * .panel-codex,#ag-pi:checked ~ * .panel-pi,
+  #ag-kimi:checked ~ * .panel-kimi,#ag-open:checked ~ * .panel-open{display:block;animation:fade .25s ease both}
+  .cmdrow{display:flex;align-items:center;gap:12px}
+  .cmdrow code{font-family:var(--mono);font-size:13px;color:var(--paper);overflow-x:auto;white-space:nowrap;flex:1;min-width:0}
+  .cmdrow code .p{color:var(--seal)}
+  .cmdrow code .t-pro{color:var(--verified)}
+  /* the command line is nowrap and truncates, so the tier flag gets its own visible chip */
+  .flag{flex:none;font-family:var(--mono);font-size:11.5px;color:var(--verified);
+    border:1px solid rgba(137,172,108,.42);border-radius:5px;padding:4px 7px;white-space:nowrap}
+  .copy{flex:none;font-family:var(--mono);font-size:12px;color:var(--muted);background:transparent;
+    border:1px solid var(--hair);border-radius:6px;padding:6px 10px;cursor:pointer;transition:color .15s,border-color .15s}
+  .copy:hover{color:var(--paper);border-color:var(--seal)}
+  .copy.done{color:var(--verified);border-color:var(--verified)}
+
+  .aside{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:16px 2px 0;line-height:1.8}
+  .aside a{border:none;color:var(--muted)} .aside a:hover{color:var(--seal)}
+  details{margin:8px 0 0}
+  details[open] summary~*{animation:fade .3s ease both}
+  summary{font-family:var(--mono);font-size:12.5px;color:var(--muted);cursor:pointer;list-style:none;transition:color .2s}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:' +';color:var(--hair);transition:transform .25s, color .2s;display:inline-block}
+  details[open] summary::after{content:' −';color:var(--seal)}
+  summary:hover{color:var(--seal)}
+  pre{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:15px;
+    overflow-x:auto;margin:10px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;color:#cec8ba;white-space:pre}
+
+  /* skills — quiet list, no boxes */
+  .skills{margin:64px 0 0;border-top:1px solid var(--faint);padding-top:34px}
+  .sk{display:grid;grid-template-columns:180px 1fr;gap:8px 20px;padding:14px 0;border-top:1px solid var(--faint)}
+  .sk:first-child{border-top:none}
+  .sk .n{font-family:var(--mono);font-size:14px;color:var(--seal)}
+  .sk .d{color:#cbc5b7;font-size:15.5px;margin:0}
+  .sk .d b{color:var(--paper);font-weight:600}
+  /* .sk sets display:grid at the same specificity as .t-pro's display:none and wins by order,
+     so the tier-hidden rows need the two-class selector on both sides. */
+  .sk.t-pro{display:none}
+  #tier-pro:checked ~ * .sk.t-pro{display:grid}
+  @media(max-width:520px){.sk{grid-template-columns:1fr;gap:3px}}
+
+  .chain{font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.9;
+    margin:26px 0 0;padding-top:20px;border-top:1px solid var(--faint)}
+  .chain .flow{display:block;white-space:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;margin:0 0 8px}
+  .chain .flow::-webkit-scrollbar{display:none;width:0;height:0}
+  .chain .flow b{color:var(--seal);font-weight:400}
+
+  /* the loop — tucked into a details, quiet */
+  .loop{font-family:var(--mono);font-size:12px;color:var(--muted);margin:40px 0 0;
+    border-top:1px solid var(--faint);padding-top:22px;line-height:1.9}
+  .loop summary{font-family:var(--mono);font-size:13px;color:var(--paper);letter-spacing:.02em;padding:0}
+  .loop .flow{display:block;white-space:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;margin:14px 0 0}
+  .loop .flow::-webkit-scrollbar{display:none;width:0;height:0}
+  .loop .flow b{color:var(--seal);font-weight:400}
+  .loop .frame{margin:18px 0 0}
+
+  /* the one signature */
+  .honest{margin:60px 0 0;border-left:2px solid var(--seal);padding:2px 0 2px 20px;color:#cbc5b7}
+  .honest b{color:var(--paper);font-weight:600}
+  .honest code{font-family:var(--mono);font-size:.9em;color:var(--seal)}
+
+  footer{margin-top:64px;border-top:1px solid var(--faint);padding:26px 0 64px;
+    font-family:var(--mono);font-size:12.5px;color:var(--muted);line-height:1.9}
+  footer a{border:none;color:var(--muted)} footer a:hover{color:var(--seal)}
+  footer .row{display:flex;flex-wrap:wrap;gap:6px 16px;margin-bottom:10px}
+  .dot{color:var(--verified)}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<input class="st" type="radio" name="lang" id="lang-en" checked>
+<input class="st" type="radio" name="lang" id="lang-es">
+<input class="st" type="radio" name="tier" id="tier-st" checked>
+<input class="st" type="radio" name="tier" id="tier-pro">
+<input class="st" type="radio" name="agent" id="ag-claude" checked>
+<input class="st" type="radio" name="agent" id="ag-codex">
+<input class="st" type="radio" name="agent" id="ag-pi">
+<input class="st" type="radio" name="agent" id="ag-kimi">
+<input class="st" type="radio" name="agent" id="ag-open">
+
+<div class="wrap">
+
+  <div class="top">
+    <span class="mk">governed<b>.</b>software</span>
+    <span class="lang"><label class="lb lb-en" for="lang-en">EN</label><label class="lb lb-es" for="lang-es">ES</label></span>
+  </div>
+
+  <header>
+    <h1><span class="i-en">Install the engineering <em>discipline</em>, not just the prompt.</span><span class="i-es">Instala la <em>disciplina</em> de ingeniería, no nada más el prompt.</span></h1>
+    <p class="sub"><span class="i-en">Skills that make your coding agent earn architectural decisions with observable evidence — an architectural question, a refutable slice, and an explicit evidence contract, before code.</span><span class="i-es">Skills que hacen que tu agente de código gane sus decisiones de arquitectura con evidencia observable — una pregunta arquitectónica, una rebanada refutable y un contrato de evidencia explícito, antes del código.</span></p>
+    <p class="pos"><span class="i-en">Native for Codex · Claude Code · Pi · Kimi Code · OpenCode. Complements DDD, TDD, SDD, ADRs.</span><span class="i-es">Nativo para Codex · Claude Code · Pi · Kimi Code · OpenCode. Complementa DDD, TDD, SDD, ADR.</span></p>
+
+    <div class="tier">
+      <label class="tb tb-st" for="tier-st">Starter</label>
+      <label class="tb tb-pro" for="tier-pro">Professional</label>
+      <span class="tnote"><span class="t-st"><span class="i-en">3 skills · changes your first move</span><span class="i-es">3 skills · te cambia el primer movimiento</span></span><span class="t-pro"><span class="i-en">8 skills · the whole station chain</span><span class="i-es">8 skills · la cadena completa de estaciones</span></span></span>
+    </div>
+
+    <div class="picker">
+      <div class="tabs">
+        <label class="tab tab-claude" for="ag-claude">Claude&nbsp;Code</label>
+        <label class="tab tab-codex" for="ag-codex">Codex</label>
+        <label class="tab tab-pi" for="ag-pi">Pi</label>
+        <label class="tab tab-kimi" for="ag-kimi">Kimi&nbsp;Code</label>
+        <label class="tab tab-open" for="ag-open">OpenCode</label>
+      </div>
+      <div class="panel panel-claude"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span><span class="t-pro"> -s -- --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-codex"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span> -s -- --codex<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-pi"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span> -s -- --pi<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-kimi"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span> -s -- --kimi<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-open"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span> -s -- --opencode<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+    </div>
+
+    <p class="aside"><span class="i-en">Then start a new session and ask it to build. · <a href="https://github.com/governed-software/doctrine-driven-development">Docs</a></span><span class="i-es">Luego abre una sesión nueva y pídele que construya. · <a href="https://github.com/governed-software/doctrine-driven-development">Docs</a></span></p>
+    <details>
+      <summary><span class="i-en">Gemini, Cursor, any agent? No install — paste the prompt.</span><span class="i-es">¿Gemini, Cursor, cualquier agente? Sin instalar — pega el prompt.</span></summary>
+      <pre class="i-en">Before writing code for a build/implement/add request, frame it first:
+1. What architectural question are we really answering? (its answer changes the BUILD ORDER)
+2. What claim would be too big for the evidence we have?
+3. What is the minimal slice that could REFUTE the idea?
+4. What observable result would count as evidence? ("it works" doesn't count)
+5. What's out of scope, and what are we deferring?
+Then ask: "Is my first move still the first?" Don't write code until this frame exists.</pre>
+      <pre class="i-es">Antes de escribir código para una petición de build/implementar/agregar, enmárcala primero:
+1. ¿Qué pregunta arquitectónica estamos respondiendo? (su respuesta cambia el ORDEN DE CONSTRUCCIÓN)
+2. ¿Qué afirmación sería demasiado grande para la evidencia que tenemos?
+3. ¿Cuál es la rebanada mínima que podría REFUTAR la idea?
+4. ¿Qué resultado observable contaría como evidencia? ("funciona" no cuenta)
+5. ¿Qué queda fuera de alcance, y qué diferimos?
+Luego pregunta: "¿Mi primer movimiento sigue siendo el primero?" No escribas código hasta que exista este marco.</pre>
+    </details>
+
+    <details class="loop">
+      <summary><span class="i-en">The loop &amp; what the agent prints</span><span class="i-es">El ciclo &amp; lo que el agente imprime</span></summary>
+      <span class="flow"><b>Question</b> → <b>Hypothesis</b> → <b>Slice</b> → <b>Adversarial review</b> → <b>Evidence</b> → <b>Doctrine</b></span>
+      <pre class="frame"><span class="i-en">Before: the first thing I was going to build was …
+
+Architectural question   What answer would change the build order?
+Overclaim to avoid       What would the current evidence not support?
+Refuting slice           What is the smallest slice that could prove us wrong?
+Evidence contract        What observable result would count?
+Deferred on purpose      What must not become architecture yet?
+
+After: is the original first move still first?</span><span class="i-es">Antes: lo primero que iba a construir era …
+
+Pregunta arquitectónica   ¿Qué respuesta cambiaría el orden de construcción?
+Sobrecarga a evitar       ¿Qué no sostendría la evidencia actual?
+Rebanada refutadora       ¿La rebanada mínima que podría probar que estamos mal?
+Contrato de evidencia     ¿Qué resultado observable contaría?
+Diferido a propósito      ¿Qué no debe volverse arquitectura aún?
+
+Después: ¿el primer movimiento original sigue siendo el primero?</span></pre>
+    </details>
+  </header>
+
+  <div class="skills">
+    <div class="sk"><span class="n">governed-discovery</span><p class="d"><span class="i-en">Frames the architectural question and the smallest slice that could refute it — before a line of code.</span><span class="i-es">Enmarca la pregunta arquitectónica y la rebanada más pequeña que podría refutarla — antes de una línea de código.</span></p></div>
+    <div class="sk"><span class="n">governed-review</span><p class="d"><span class="i-en">Breaks load-bearing claims against their actual artifacts — unproven claims, silent failures, tautological evidence.</span><span class="i-es">Rompe las afirmaciones que cargan peso contra sus artefactos reales — afirmaciones no probadas, fallos silenciosos, evidencia tautológica.</span></p></div>
+    <div class="sk"><span class="n">governed-close</span><p class="d"><span class="i-en">States what the evidence proved, what it did not, and what stays deferred. The green check is not the evidence.</span><span class="i-es">Dice qué probó la evidencia, qué no, y qué queda diferido. La palomita verde no es la evidencia.</span></p></div>
+
+    <div class="sk t-pro"><span class="n">governed-scout</span><p class="d"><span class="i-en"><b>Scout.</b> Sweeps the ground and returns cited findings and named unknowns. It never recommends.</span><span class="i-es"><b>Scout.</b> Barre el terreno y regresa hallazgos citados e incógnitas nombradas. Nunca recomienda.</span></p></div>
+    <div class="sk t-pro"><span class="n">governed-sdd</span><p class="d"><span class="i-en"><b>Architect.</b> Turns findings into the questions whose answers reorder construction — and cuts the ones that don't.</span><span class="i-es"><b>Architect.</b> Convierte hallazgos en las preguntas cuyas respuestas reordenan la construcción — y corta las que no.</span></p></div>
+    <div class="sk t-pro"><span class="n">governed-plan</span><p class="d"><span class="i-en"><b>Planner.</b> Orders slices by blast radius — the one whose failure would hurt most goes first.</span><span class="i-es"><b>Planner.</b> Ordena las rebanadas por radio de impacto — primero la que más dolería si falla.</span></p></div>
+    <div class="sk t-pro"><span class="n">governed-slice</span><p class="d"><span class="i-en"><b>Builder.</b> Builds exactly one slice against its evidence contract. It never reviews its own work.</span><span class="i-es"><b>Builder.</b> Construye exactamente una rebanada contra su contrato de evidencia. Nunca revisa su propio trabajo.</span></p></div>
+    <div class="sk t-pro"><span class="n">governed-adr</span><p class="d"><span class="i-en"><b>Recorder.</b> Crystallizes what a slice proved, in past tense, with the observation that would kill it.</span><span class="i-es"><b>Recorder.</b> Cristaliza lo que la rebanada probó, en pasado, con la observación que lo mataría.</span></p></div>
+
+    <div class="chain t-pro">
+      <span class="flow"><b>Scout</b> → <b>Architect</b> → <b>Planner</b> → <b>Builder</b> → <b>Reviewer</b> → <b>Recorder</b></span>
+      <span class="i-en">Each station consumes one named artifact and refuses to do the next station's job. That contract is what makes it a pipeline instead of eight prompts sharing a prefix.</span><span class="i-es">Cada estación consume un artefacto con nombre y se niega a hacer el trabajo de la siguiente. Ese contrato es lo que la vuelve un pipeline y no ocho prompts que comparten prefijo.</span>
+    </div>
+  </div>
+
+  <p class="honest"><span class="i-en"><b>What it doesn't prove — yet.</b> D³ is a hypothesis, designed to be refuted. Every datapoint so far is internal. Starter is ratified by a developer we've never met whose first move changes; Professional, by someone already working this way whose result improves because a station <em>refused</em> to do the next station's job. If neither happens, the skills are refuted — not the doctrine.</span><span class="i-es"><b>Lo que aún no prueba.</b> D³ es una hipótesis, diseñada para ser refutada. Todo datapoint hasta ahora es interno. Starter se ratifica con un desarrollador que no conocemos y a quien le cambia el primer movimiento; Professional, con alguien que ya trabaja así y cuyo resultado mejora porque una estación <em>se negó</em> a hacer el trabajo de la siguiente. Si no pasa ninguna de las dos, las refutadas son las skills — no la doctrina.</span></p>
+
+  <footer>
+    <div class="row">
+      <a href="https://github.com/governed-software/doctrine-driven-development">GitHub</a>
+      <a href="https://x.com/rodrigoteamx?utm_source=governed.software&amp;utm_medium=referral&amp;utm_campaign=footer">@rodrigoteamx</a>
+      <a href="https://teamx.agency/?utm_source=governed.software&amp;utm_medium=referral&amp;utm_campaign=footer">teamx.agency</a>
+    </div>
+    <div class="row">
+      <span><span class="dot">●</span> <span class="i-en">signed &amp; Verified</span><span class="i-es">firmado y Verified</span></span>
+      <span>Apache-2.0</span>
+      <span>© Rodrigo Vicente — TeamX Agency</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var code=b.parentNode.querySelector('code');
+      if(!code||!navigator.clipboard)return;
+      // innerText, not textContent — it respects the hidden --pro suffix.
+      var cmd=(code.innerText||code.textContent||'').replace(/\s+/g,' ').trim();
+      navigator.clipboard.writeText(cmd).then(function(){
+        var t=b.textContent;b.textContent=(document.getElementById('lang-es').checked?'copiado':'copied');
+        b.classList.add('done');setTimeout(function(){b.textContent=t;b.classList.remove('done');},1600);
+      });
+    });
+  });
+</script>
+</body>
+</html>
