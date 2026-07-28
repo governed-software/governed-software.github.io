@@ -98,6 +98,7 @@
   .copy.done{color:var(--verified);border-color:var(--verified)}
 
   .aside{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin:16px 2px 0;line-height:1.8}
+  .fp{font-family:var(--mono);font-size:12.5px;color:var(--seal);white-space:nowrap;letter-spacing:.02em}
   .aside a{border:none;color:var(--muted)} .aside a:hover{color:var(--seal)}
   details{margin:8px 0 0}
   details[open] summary~*{animation:fade .3s ease both}
@@ -192,6 +193,10 @@
       </label>
     </div>
 
+    <p class="aside"><span class="i-en">One-time: import the key that signs every release, so the installer can prove where it came from.</span><span class="i-es">Una sola vez: importa la llave que firma cada release, para que el instalador pueda probar de dónde viene.</span></p>
+    <div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/KEYS.asc | <span class="p">gpg</span> --import</code><button class="copy" type="button">copy</button></div>
+    <p class="aside"><span class="i-en">Without it the installer stops and says <b>UNPROVEN</b> rather than installing quietly. Every file it writes is checked against a signed manifest either way. Fingerprint <code class="fp">7D72DEBDA1D36D34</code> — GitHub shows the tag Verified under it, and this page is the second host that has to agree. <a href="https://github.com/governed-software/doctrine-driven-development#before-you-install-verify-what-is-about-to-govern-you">Read it before you run it</a> — the method would be refuted by its own first lesson if it asked you to obey unread.</span><span class="i-es">Sin ella el instalador se detiene y dice <b>UNPROVEN</b> en vez de instalar en silencio. En ambos casos verifica cada archivo que escribe contra un manifiesto firmado. Huella <code class="fp">7D72DEBDA1D36D34</code> — GitHub muestra el tag como Verified con ella, y esta página es el segundo host que tiene que coincidir. <a href="https://github.com/governed-software/doctrine-driven-development#before-you-install-verify-what-is-about-to-govern-you">Léelo antes de ejecutarlo</a> — el método quedaría refutado por su propia primera lección si te pidiera obedecer sin leer.</span></p>
+
     <div class="picker">
       <div class="tabs">
         <label class="tab tab-claude" for="ag-claude">Claude&nbsp;Code</label>
@@ -200,11 +205,11 @@
         <label class="tab tab-kimi" for="ag-kimi">Kimi&nbsp;Code</label>
         <label class="tab tab-open" for="ag-open">OpenCode</label>
       </div>
-      <div class="panel panel-claude"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span><span class="t-pro"> -s -- --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
-      <div class="panel panel-codex"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span> -s -- --codex<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
-      <div class="panel panel-pi"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span> -s -- --pi<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
-      <div class="panel panel-kimi"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span> -s -- --kimi<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
-      <div class="panel panel-open"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/main/install.sh | <span class="p">bash</span> -s -- --opencode<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-claude"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | <span class="p">bash</span><span class="t-pro"> -s -- --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-codex"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | <span class="p">bash</span> -s -- --codex<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-pi"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | <span class="p">bash</span> -s -- --pi<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-kimi"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | <span class="p">bash</span> -s -- --kimi<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
+      <div class="panel panel-open"><div class="cmdrow"><code><span class="p">curl</span> -fsSL https://raw.githubusercontent.com/governed-software/doctrine-driven-development/v0.1.1/install.sh | <span class="p">bash</span> -s -- --opencode<span class="t-pro"> --pro</span></code><span class="flag t-pro">--pro</span><button class="copy" type="button">copy</button></div></div>
     </div>
 
     <p class="aside"><span class="i-en">Then start a new session and ask it to build. · <a href="https://github.com/governed-software/doctrine-driven-development">Docs</a></span><span class="i-es">Luego abre una sesión nueva y pídele que construya. · <a href="https://github.com/governed-software/doctrine-driven-development">Docs</a></span></p>
@@ -293,7 +298,7 @@ Después: ¿sigue siendo lo primero que construiría?</span></pre>
       <a href="https://teamx.agency/?utm_source=governed.software&amp;utm_medium=referral&amp;utm_campaign=footer">teamx.agency</a>
     </div>
     <div class="row">
-      <span><span class="dot">●</span> <span class="i-en">signed &amp; Verified</span><span class="i-es">firmado y Verified</span></span>
+      <span><span class="dot">●</span> <span class="i-en">signed &amp; Verified</span><span class="i-es">firmado y verificado</span></span>
       <span>Apache-2.0</span>
       <span>© Rodrigo Vicente — TeamX Agency</span>
     </div>
